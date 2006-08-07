@@ -1,0 +1,111 @@
+body {
+	margin: 0;
+}
+
+.mainBlock {
+	width: 132px;
+	height: 92px;
+	display: table-cell;
+	vertical-align: middle;
+	background: url(Default.png) no-repeat;
+}
+
+.timeText {
+	font:	18px "Futura";
+	color: #000000;
+	text-align: center;
+}
+
+.locationText {
+	font: 12px "Futura";
+	color: #505050;
+	text-align: center;
+}
+
+#worldPopup {
+	position: absolute;
+	top: 41;
+	left: 40;
+	width: 140;
+}
+
+.flip {
+	position: absolute;
+	top: 65px;
+	left: 105px;
+	width: 13px;
+	height:	13px;
+}
+
+#flip {
+	opacity:0;
+	background: url(file:///System/Library/WidgetResources/ibutton/black_i.png) no-repeat top left;
+	z-index:8000;
+}
+
+#fliprollie {
+	display:none;
+	opacity:0.25;
+	background: url(file:///System/Library/WidgetResources/ibutton/black_rollie.png) no-repeat top left;
+	z-index:7999;
+
+}
+
+.doneButton {
+  position: absolute;
+  top: 55px;
+  left: 65px;
+} 
+
+#back {
+	width: 132px;
+	height: 92px;
+	display: table-cell;
+	vertical-align: middle;
+	background: url(Images/Default-back.png) no-repeat;
+	display: none;
+}
+
+.label {
+  position: absolute;
+  font: 10px "Helvetica Neue";
+  font-weight: bold;
+  color:white;
+  left: 9px;
+}
+
+#name-label {
+  top:6px;
+}
+
+#offset-label {
+  top:41px;
+}
+
+.field {
+  position: absolute;
+  font: 12px "LucidaGrande";
+  left: 9px;
+}
+
+#nameField {
+  top: 18px;
+  width: 70px;
+}
+
+#offsetField {
+	top: 53px;
+} 
+
+#use24HR {
+	position: absolute;
+	top: 57px;
+	left: 46px;
+}	
+
+#dstSelect {
+	position: absolute;
+	top: 20px;
+	left: 83px;
+	width: 40px;
+}

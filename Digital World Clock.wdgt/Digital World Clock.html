@@ -1,0 +1,40 @@
+<html>
+<head>
+	<style type="text/css">
+		@import "Digital World Clock.css";
+	</style>
+
+	<script type='text/javascript' src='Flipper.js' charset='utf-8'></script>
+	<script type='text/javascript' src='DSTCalculatorInit.js' charset='utf-8'></script>
+	<script type='text/javascript' src='DSTCalculator.js' charset='utf-8'></script>
+	<script type='text/javascript' src='Digital World Clock.js' charset='utf-8'></script>
+</head>
+
+<body onload='setup();'>
+
+	<div id="front" onmousemove='mousemove(event);' onmouseout='mouseexit(event);'>
+		<div class="mainBlock">
+			<div class="timeText" id="time">00:00</div>
+			<div class="locationText" id="location">Now</div>
+
+			<div class='flip' id='fliprollie'></div>
+			<div class='flip' id='flip' onclick='showPrefs(event);' onmouseover='enterflip(event);' onmouseout='exitflip(event)';></div>
+		</div>
+	</div>
+
+	<div id="back">
+ 
+		<div id='name-label' class='label'>Location Name/DST</div>
+    <div id='offset-label' class='label'>Offset from GMT/24-hr</div>
+		<input id='nameField' class='field'/>
+		<select id='dstSelect'>
+			<!--  This is populated by setup() -->
+		</select>
+		<input id='offsetField' class='field' size='3' />
+		<input type='checkbox' id='use24HR' />
+       
+		<img class="doneButton" src="Images/done.png" onclick='doneClicked()' />
+	</div>
+		
+</body>
+</html>
