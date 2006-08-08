@@ -1,6 +1,13 @@
+/**
+ * Defines DSTCalculator and a series of functions for easing DST calculations.
+ */
+
 DSTCalculator = new Object;
 DSTCacher = new Object;
 
+/**
+ * Retrieves and caches the current day of the month.
+ */
 function getDayOfMonth(cacheKey, dayOffset, calibrate) {
     var year = (new Date().getUTCFullYear()); 
     
@@ -17,10 +24,16 @@ function getDayOfMonth(cacheKey, dayOffset, calibrate) {
     return DSTCacher[cacheKey]['result'];
 }
 
+/**
+ * 
+ */
 function calculateDayOfMonth(year, dayOffset, calibrate) {
     return dayOffset - ((Math.floor((5 * year) / 4) + calibrate) % 7);
 }
 
+/**
+ *
+ */
 function givenAreaIsInOffset(name, startMonth, endMonth, startDayOffset, startDayCalibrate, endDayOffset, endDayCalibrate, changeTime, offsetFromGMT) {
     now = new Date();
     startDay = getDayOfMonth(name+'-start', startDayOffset, startDayCalibrate);
@@ -28,6 +41,9 @@ function givenAreaIsInOffset(name, startMonth, endMonth, startDayOffset, startDa
     return offsetTest(now, startMonth, endMonth, startDay, endDay, offsetFromGMT, changeTime);
 }
 
+/**
+ * Checks to see if a given time is in DST offset based on start/end time
+ */
 function offsetTest(now, startMonth, endMonth, startDay, endDay, offsetFromGMT, changeTime) {
 	var month = now.getUTCMonth() + 1;
 

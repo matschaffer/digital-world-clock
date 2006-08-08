@@ -1,5 +1,6 @@
-var DAY_ARRAY = new Array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-
+/**
+ * In-memory storage for preferences.
+ */
 var prefs = new Object;
 prefs.use24HR = true;
 prefs.tiny = false;
@@ -8,11 +9,25 @@ prefs.cityName = 'Gifu';
 prefs.offsetFromGMT = 9;
 prefs.showSeconds = false;
 
+/**
+ * Storage for the last displayed time.
+ */
 var referenceTime = undefined;
+
+/**
+ * Refresh cycle in miliseconds.
+ */
 var cycleInterval = 100;
+
+/**
+ * Handle for refresh cycle.
+ */
 var cycleHandle = null;
 
-//Widget setup
+/**
+ * Sets up widget operational parameters.
+ * This runs as this file is loaded.
+ */
 if (window.widget) {
 	widget.onhide = function() {
 	    if (cycleHandle != null) {
@@ -33,6 +48,7 @@ if (window.widget) {
 
 /**
  * Boots the widget.
+ * Called from body.onload
  */
 function setup()
 {
@@ -93,23 +109,21 @@ function timeChanged(countSeconds) {
 	var cur = new Date();
 
 	if (referenceTime != undefined) {
-		var ref = referenceTime;
-
 		same = (
-			ref.getMinutes() == cur.getMinutes() &&
-			ref.getHours() == cur.getHours() &&
-			ref.getDay() == cur.getDay() &&
-			ref.getMonth() == cur.getMonth() &&
-			ref.getFullYear() == cur.getFullYear()
+			referenceTime.getMinutes() == cur.getMinutes() &&
+			referenceTime.getHours() == cur.getHours() &&
+			referenceTime.getDay() == cur.getDay() &&
+			referenceTime.getMonth() == cur.getMonth() &&
+			referenceTime.getFullYear() == cur.getFullYear()
 		);
 		
 		if(prefs.showSeconds) {
-		  same = same && (ref.getSeconds() == cur.getSeconds());
+		  same = same && (referenceTime.getSeconds() == cur.getSeconds());
 		}
-	} 
+	} else {
+	   referenceTime = cur;
+	}
 
-	referenceTime = cur;
-	
 	return !same;
 }
 
@@ -139,6 +153,8 @@ function updateDisplay() {
     
 	document.getElementById('time').firstChild.data=stringTime;
 	document.getElementById('location').firstChild.data=prefs.cityName;
+	
+	referenceTime = time;
 }
 
 /**
