@@ -1,0 +1,3 @@
+function testTruth() {
+    assert("", true);
+}
