@@ -1,49 +1,49 @@
+var frontDisplay = "table-cell";
+var backDisplay = "block";
+
+/**
+ * Abstracts flipping logic.
+ * @param String transition A transition name
+ * @param function cleanup A function to be called during the transition.  This should change div display styles.
+ */
+function flipWidget(transition, cleanup) {
+    var front = document.getElementById("front");
+	var back = document.getElementById("back");
+
+    if (window.widget)
+		widget.prepareForTransition(transition);
+
+    cleanup();
+    
+	if (window.widget)
+		setTimeout ('widget.performTransition();', 0);		// and flip the widget over
+}
+
+/**
+ * Flips the widget to the back side.
+ */
 function showPrefs()
-{
-	var front = document.getElementById("front");
-	var back = document.getElementById("back");
-	
-	if (window.widget)
-		widget.prepareForTransition("ToBack");		// freezes the widget so that you can change it without the user noticing
-	
-	front.style.display="none";		// hide the front
-	back.style.display="block";		// show the back
-	
-	if (window.widget)
-		setTimeout ('widget.performTransition();', 0);		// and flip the widget over	
-
-	document.getElementById('fliprollie').style.display = 'none';  // clean up the front side - hide the circle behind the info button
-
+{	
+    flipWidget("ToBack", function() {
+        front.style.display = "none";       //hide the front
+        back.style.display = backDisplay;   //show the back
+    });	
 }
 
-
-// hidePrefs() is called by the done button on the back side of the widget.  It performs the opposite transition
-// as showPrefs() does.
-
+/**
+ * Flips the widget to the front side.
+ */
 function hidePrefs()
-{
-	var front = document.getElementById("front");
-	var back = document.getElementById("back");
-	
-	if (window.widget)
-		widget.prepareForTransition("ToFront");		// freezes the widget and prepares it for the flip back to the front
-	
-	back.style.display="none";			// hide the back
-	front.style.display="block";		// show the front
-	
-	if (window.widget)
-		setTimeout ('widget.performTransition();', 0);		// and flip the widget back to the front
+{	
+    flipWidget("ToFront", function() {
+	   back.style.display="none";			// hide the back
+	   front.style.display=frontDisplay;	// show the front
+    });	
 }
 
-
-// PREFERENCE BUTTON ANIMATION (- the pref flipper fade in/out)
-
-var flipShown = false;		// a flag used to signify if the flipper is currently shown or not.
-
-
-// A structure that holds information that is needed for the animation to run.
+// Code below taken from Apple's developer guides verbatum
+var flipShown = false;
 var animation = {duration:0, starttime:0, to:1.0, now:0.0, from:0.0, firstElement:null, timer:null};
-
 
 // mousemove() is the event handle assigned to the onmousemove property on the front div of the widget. 
 // It is triggered whenever a mouse is moved within the bounds of your widget.  It prepares the
