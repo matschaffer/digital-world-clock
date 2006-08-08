@@ -1,216 +1,211 @@
 var DAY_ARRAY = new Array("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
 
-var use24HR = true;
-var dstRule = 'North America'; 
-var cityName = "Philadelphia";
-var offsetFromGMT = -5;
-var refTime = undefined;
+var prefs = new Object;
+prefs.use24HR = true;
+prefs.tiny = false;
+prefs.dstRule = 'None';
+prefs.cityName = 'Gifu';
+prefs.offsetFromGMT = 9;
+prefs.showSeconds = false;
 
-var cycleInterval = 1000;
+var referenceTime = undefined;
+var cycleInterval = 100;
 var cycleHandle = null;
 
 //Widget setup
 if (window.widget) {
-	//set hide/show
-	widget.onhide = onhide;
-	widget.onshow = onshow;
+	widget.onhide = function() {
+	    if (cycleHandle != null) {
+            clearInterval(cycleHandle);
+            cycleHandle = null;
+        }
+	};
+	
+	widget.onshow = function() {
+	   	updateDisplay();
+        if (cycleHandle == null) {
+            cycleHandle = setInterval("updateDisplay_cycle();", cycleInterval);
+        }
+	};
 
-	//get preferences
-	var cityPref = widget.preferenceForKey(createkey("cityName"));
-	if (cityPref != undefined) {
-		cityName = cityPref;
-	}
-
-	var offsetPref = widget.preferenceForKey(createkey("offsetFromGMT"));
-	if (offsetPref != undefined) {
-		offsetFromGMT = parseFloat(offsetPref);
-	}
-
-	var use24HRPref = widget.preferenceForKey(createkey("use24HR"));
-	if (use24HRPref != undefined) {
-		use24HR = use24HRPref;
-	}
-		
-	var dstRulePref = widget.preferenceForKey(createkey("dstRule"));
-	if (dstRulePref != undefined) {
-		dstRule = dstRulePref;
-	}
+    loadPrefences();
 }
-//end widget setup
 
+/**
+ * Boots the widget.
+ */
 function setup()
 {
 	//TODO Get default values for DST and GMT offset from OS
-	//--- javascript makes this kinda difficult to do right, so
-	//--- we're just gonna pay hommage to Philadelphia for the time being
-/*	var now = new Date();
-	if (offsetFromGMT == undefined) {
-		offsetFromGMT = 0 - (now.getTimezoneOffset() / 60.0);
-	}
-	if (dstRule == undefined) {
-		dstRule = 0;
-	} */
-	
 	loadDSTSelector();
 	
 	//populate backside fields	
-	document.getElementById('nameField').value = cityName;
-	document.getElementById('offsetField').value = offsetFromGMT;
-	document.getElementById('use24HR').checked = use24HR;
+	document.getElementById('nameField').value = prefs.cityName;
+	document.getElementById('offsetField').value = prefs.offsetFromGMT;
 	
   	//.selectedIndex needs to be a number, not a string like dstRule is, so first we find it
   	var selector = document.getElementById('dstSelect');
   	var selectedIndex = -1;
   	for (var i = 0; ((i < selector.options.length) && (selectedIndex == -1)); i++) {
-  		if (selector.options[i].value == dstRule) {
+  		if (selector.options[i].value == prefs.dstRule) {
   			selectedIndex = i;
   		}
   	}
   	//Now that we found it, set it
 	selector.selectedIndex = selectedIndex;
+	
+	document.getElementById('tiny').checked = prefs.tiny;
 
-	//Update display
-	displayLocation();
-	updateTime();
+	updateDisplay();
 
 	return 0;
 }
 
+/**
+ * Dynamically populates the DST dropdown selector from the DSTCalculator object.
+ */
 function loadDSTSelector() {
 	var selector = document.getElementById('dstSelect');
 	var j = 0;
 	for (var i in DSTCalculator) {
-		selector.innerHTML = selector.innerHTML + 
-				'<option value="'+i+'">'+j+': '+i+'</option>\n';
-		j++;
+	    option = document.createElement('option');
+	    option.value = i;
+	    option.innerHTML = j++ + ": " + i;
+	    selector.appendChild(option);
 	}
 }
 
-function onshow() {
-	updateTime();
-    if (cycleHandle == null) {
-        cycleHandle = setInterval("updateTime_cycle();", cycleInterval);
-    }
-}
-
-function updateTime_cycle() {
+/**
+ * Wraps updateDisplay so we don't do it unless the time has changed.
+ * This makes the refresh cycles lighter if they're called too often.
+ */
+function updateDisplay_cycle() {
 	if (timeChanged()) {
-		updateTime();
+		updateDisplay();
 	}
 }
 
-function onhide() {
-    if (cycleHandle != null) {
-        clearInterval(cycleHandle);
-        cycleHandle = null;
-    }
-}
-
-function timeChanged() {
+/**
+ * Checks if the displayed time has changed.  
+ */
+function timeChanged(countSeconds) {
 	var same = false;
 	var cur = new Date();
 
-	if (refTime != undefined) {
-		var ref = refTime;
+	if (referenceTime != undefined) {
+		var ref = referenceTime;
 
 		same = (
-			//ref.getSeconds() == cur.getSeconds() &&
 			ref.getMinutes() == cur.getMinutes() &&
 			ref.getHours() == cur.getHours() &&
 			ref.getDay() == cur.getDay() &&
 			ref.getMonth() == cur.getMonth() &&
 			ref.getFullYear() == cur.getFullYear()
 		);
+		
+		if(prefs.showSeconds) {
+		  same = same && (ref.getSeconds() == cur.getSeconds());
+		}
 	} 
 
-	refTime = cur;
+	referenceTime = cur;
 	
 	return !same;
 }
 
-function updateTime() {
+/**
+ * Updates front-side display elements.
+ */
+function updateDisplay() {
+    if (prefs.tiny) {
+        front.className = "small";
+    } else {
+        front.className = "big";
+    }
+    
 	time = getOffsetTime();
-	displayTime(formatTime(time));
+	
+	hourSymbol = (prefs.use24HR)?"%H":"%l";
+	secondSymbol = (prefs.showSeconds)?":%S":"";
+	
+	stringTime = time.strftime("%a "+hourSymbol+":%M"+secondSymbol);
+	
+	document.getElementById('time').firstChild.data=stringTime;
+	document.getElementById('location').firstChild.data=prefs.cityName;
 }
 
+/**
+ * Get the time offset by GMT and DST preferences.
+ */
 function getOffsetTime() {
   	var now = new Date();
 	var gmt = new Date(now.getTime() + (now.getTimezoneOffset() * 60 * 1000));
 
-	dstOffset = DSTCalculator[dstRule](parseFloat(offsetFromGMT));
+	dstOffset = DSTCalculator[prefs.dstRule](parseFloat(prefs.offsetFromGMT));
  
-	now.setTime(gmt.getTime() + (((offsetFromGMT + dstOffset) * 60) * 60 * 1000));
+	now.setTime(gmt.getTime() + (((prefs.offsetFromGMT + dstOffset) * 60) * 60 * 1000));
 
 	return now;
 }
 
-function formatTime(time) {
-	var padMinutes = "";
-	var padSeconds= "";
-	var hours = time.getHours();
-	var amPm = "";
-
-	if (time.getMinutes() < 10) {
-		padMinutes = "0";
-	}
-
-	if (time.getSeconds() < 10) {
-		padSeconds = "0";
-	}
-
-	if (use24HR == false) {
-		if (hours >= 12) {
-			amPm = "p";
-		} else {
-			amPm = "a";
-		}
-
-		hours %= 12;
-
-		if (hours == 0) {
-			hours = 12;
-		}
-	}	
-		
-	return DAY_ARRAY[time.getDay()] + " " + String(hours) + ":" + padMinutes + String(time.getMinutes()) + amPm;
-	//The line below will display seconds
-	/* return DAY_ARRAY[time.getDay()] + " " + String(time.getHours()) + ":" + padMinutes + String(time.getMinutes()) + ":" + padSeconds + String(time.getSeconds()); */
-}
-
-function displayTime(time)
-{
-	document.getElementById('time').firstChild.data=time;
-}
-
-function displayLocation()
-{
-	document.getElementById('location').firstChild.data=cityName;
-}
-
-function updatePrefs() {
-	cityName = document.getElementById('nameField').value;
-	offsetFromGMT = parseFloat(document.getElementById('offsetField').value);
-	use24HR = document.getElementById('use24HR').checked;
+/**
+ * Grabs preferences from backside form elements.
+ */
+function updatePreferences() {
+	prefs.cityName = document.getElementById('nameField').value;
+	prefs.offsetFromGMT = parseFloat(document.getElementById('offsetField').value);
+	prefs.tiny = document.getElementById('tiny').checked;
 	var dstBox = document.getElementById('dstSelect');
-	dstRule = dstBox.options[dstBox.selectedIndex].value;
-
-	//set preferences for persistence
-	if (window.widget) {
-		widget.setPreferenceForKey(cityName,  createkey("cityName"));
-		widget.setPreferenceForKey(offsetFromGMT, createkey("offsetFromGMT"));
-		widget.setPreferenceForKey(use24HR, createkey("use24HR"));
-		widget.setPreferenceForKey(dstRule, createkey("dstRule"));
-	}
+	prefs.dstRule = dstBox.options[dstBox.selectedIndex].value;
 }
 
+/**
+ * Cleans up after the "done" button is clicked.
+ */
 function doneClicked() {
-	updatePrefs();
-	hidePrefs();
-	updateTime();
-	displayLocation();
+	updatePreferences();
+	savePreferences();
+	hidePreferences();
+	updateDisplay();
 }
 
+/**
+ * Makes a unique preference key for this widget.
+ */
 function createkey(key)
 {
 	return widget.identifier + "-" + key;
 }
+
+/**
+ * Loads preferences from Dashboard's preference engine.
+ */
+function loadPrefences() {
+    var preference;
+	for(i in prefs) {
+	   preference = widget.preferenceForKey(createkey(i));
+	   if (preference != undefined) {
+	       prefs[i] = preference;
+	   }
+	}
+}
+
+/**
+ * Saves preferences into Dashboard's preference engine.
+ */
+function savePreferences() {
+    if (window.widget) {
+        for(i in prefs) {
+            widget.setPreferenceForKey(prefs[i], createkey(i));
+        }
+    }
+}
+
+/**
+ * Switches the time format from 24HR to 12HR.
+ */
+function switchFormat() {
+    prefs.use24HR = !prefs.use24HR;
+    savePreferences();
+    updateDisplay();
+} 

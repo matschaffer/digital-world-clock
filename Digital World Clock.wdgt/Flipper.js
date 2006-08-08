@@ -22,7 +22,7 @@ function flipWidget(transition, cleanup) {
 /**
  * Flips the widget to the back side.
  */
-function showPrefs()
+function showPreferences()
 {	
     flipWidget("ToBack", function() {
         front.style.display = "none";       //hide the front
@@ -33,12 +33,14 @@ function showPrefs()
 /**
  * Flips the widget to the front side.
  */
-function hidePrefs()
+function hidePreferences()
 {	
     flipWidget("ToFront", function() {
 	   back.style.display="none";			// hide the back
 	   front.style.display=frontDisplay;	// show the front
     });	
+    exitflip();
+    mouseexit();
 }
 
 // Code below taken from Apple's developer guides verbatum
@@ -139,14 +141,12 @@ function computeNextFloat (from, to, ease)
     return from + (to - from) * ease;
 }
 
-// these functions are called when the info button itself receives onmouseover and onmouseout events
-
-function enterflip(event)
+function enterflip()
 {
 	document.getElementById('fliprollie').style.display = 'block';
 }
 
-function exitflip(event)
+function exitflip()
 {
 	document.getElementById('fliprollie').style.display = 'none';
 }

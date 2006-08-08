@@ -4,6 +4,7 @@
 		@import "Digital World Clock.css";
 	</style>
 
+    <script type='text/javascript' src='date.js' charset='utf-8'></script> 	
 	<script type='text/javascript' src='Flipper.js' charset='utf-8'></script>
 	<script type='text/javascript' src='DSTCalculatorInit.js' charset='utf-8'></script>
 	<script type='text/javascript' src='DSTCalculator.js' charset='utf-8'></script>
@@ -12,25 +13,25 @@
 
 <body onload='setup();'>
 
-	<div id="front" class="big" onmousemove='mousemove(event);' onmouseout='mouseexit(event);'>
-		<div class="clock">
-			<div id="time" class="big" >00:00</div>
-			<div id="location" class="big" >Now</div>
+	<div id="front" onmousemove='mousemove(event);' onmouseout='mouseexit(event);'>
+		<div class="clock" onclick="switchFormat();">
+			<div id="time">00:00</div>
+			<div id="location">Now</div>
 		</div>
 
-		<div class='flip big' id='fliprollie'></div>
-		<div class='flip big' id='flip' onclick='showPrefs(event);' onmouseover='enterflip(event);' onmouseout='exitflip(event)';></div>
+		<div class='flip' id='fliprollie'></div>
+		<div class='flip' id='flip' onclick='showPreferences();' onmouseover='enterflip();' onmouseout='exitflip()';></div>
 	</div>
 
 	<div id="back">
 		<div id='name-label' class='label'>Location Name/DST</div>
-        <div id='offset-label' class='label'>Offset from GMT/24-hr</div>
+        <div id='offset-label' class='label'>Offset from GMT / Tiny</div>
 		<input id='nameField' class='field'/>
 		<select id='dstSelect'>
 			<!--  This is populated by setup() -->
 		</select>
 		<input id='offsetField' class='field' size='3' />
-		<input type='checkbox' id='use24HR' />
+		<input type='checkbox' id='tiny' />
        
 		<img class="doneButton" src="Images/done.png" onclick='doneClicked()' />
 	</div>

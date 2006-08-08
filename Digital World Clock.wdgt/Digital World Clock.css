@@ -6,12 +6,18 @@ body {
 #front {
     display: table-cell;
     vertical-align: middle;
-	background: url(Default.png) no-repeat;
 }
 
 #front.big {
     width: 132px;
     height: 92px;
+	background: url(Default.png) no-repeat;
+}
+
+#front.small {
+    width: 90px;
+    height: 50px;
+    background: url(Small.png) no-repeat;
 }
 
 .clock {
@@ -23,24 +29,43 @@ body {
 	color: #000000;
 }
 
-#time.big {
+.big #time {
 	font-size: 18px;
+}
+
+.small #time {
+    font: 11px/11px "Lucida Grande";
+    color: #000;
 }
 
 #location {
 	color: #505050;
 }
 
-#location.big {
+.big #location {
 	font-size: 12px;
 }
 
-.flip.big {
+.small #location {
+  color: #888;
+  font: 9px/9px Geneva;
+  letter-spacing: -1px;
+}
+
+.flip {
 	position: absolute;
-	top: 65px;
-	left: 110px;
 	width: 13px;
 	height:	13px;
+}
+
+.big .flip {
+	top: 65px;
+	left: 110px;
+}
+
+.small .flip {
+    top: 24px;
+    left: 66px;    
 }
 
 #flip {
@@ -103,7 +128,7 @@ body {
 	top: 53px;
 } 
 
-#use24HR {
+#tiny {
 	position: absolute;
 	top: 57px;
 	left: 46px;
