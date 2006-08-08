@@ -1,38 +1,44 @@
 body {
 	margin: 0;
+	font-family: "Futura" sans;
 }
 
-.mainBlock {
-	width: 132px;
-	height: 92px;
-	display: table-cell;
-	vertical-align: middle;
+#front {
+    display: table-cell;
+    vertical-align: middle;
 	background: url(Default.png) no-repeat;
 }
 
-.timeText {
-	font:	18px "Futura";
+#front.big {
+    width: 132px;
+    height: 92px;
+}
+
+.clock {
+    margin: auto 0;
+	text-align: center;
+}
+
+#time {
 	color: #000000;
-	text-align: center;
 }
 
-.locationText {
-	font: 12px "Futura";
+#time.big {
+	font-size: 18px;
+}
+
+#location {
 	color: #505050;
-	text-align: center;
 }
 
-#worldPopup {
-	position: absolute;
-	top: 41;
-	left: 40;
-	width: 140;
+#location.big {
+	font-size: 12px;
 }
 
-.flip {
+.flip.big {
 	position: absolute;
 	top: 65px;
-	left: 105px;
+	left: 110px;
 	width: 13px;
 	height:	13px;
 }
