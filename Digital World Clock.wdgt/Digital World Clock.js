@@ -124,12 +124,19 @@ function updateDisplay() {
     }
     
 	time = getOffsetTime();
-	
-	hourSymbol = (prefs.use24HR)?"%H":"%l";
-	secondSymbol = (prefs.showSeconds)?":%S":"";
-	
-	stringTime = time.strftime("%a "+hourSymbol+":%M"+secondSymbol);
-	
+
+    secondSymbol = (prefs.showSeconds)?":%S":"";
+    if (prefs.use24HR) {
+        stringTime = time.strftime("%a %H:%M"+secondSymbol);
+    } else {
+        stringTime = time.strftime("%a %l:%M"+secondSymbol);
+        if(time.getHours() < 12) {
+           stringTime += "a";
+        } else {
+           stringTime += "p";
+        }
+    }
+    
 	document.getElementById('time').firstChild.data=stringTime;
 	document.getElementById('location').firstChild.data=prefs.cityName;
 }
