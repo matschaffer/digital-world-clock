@@ -1,8 +1,8 @@
 /**
- * In-memory storage for preferences.
+ * In-memory storage for preferences.  Starts with default options.
  */
 var prefs = new Object;
-prefs.use24HR = true;
+prefs.use24HR = false;
 prefs.tiny = false;
 prefs.dstRule = 'None';
 prefs.cityName = 'Gifu';
@@ -12,7 +12,7 @@ prefs.showSeconds = false;
 /**
  * Storage for the last displayed time.
  */
-var referenceTime = undefined;
+var lastUpdate = undefined;
 
 /**
  * Refresh cycle in miliseconds.
@@ -25,55 +25,29 @@ var cycleInterval = 100;
 var cycleHandle = null;
 
 /**
- * Sets up widget operational parameters.
- * This runs as this file is loaded.
- */
-if (window.widget) {
-	widget.onhide = function() {
-	    if (cycleHandle != null) {
-            clearInterval(cycleHandle);
-            cycleHandle = null;
-        }
-	};
-	
-	widget.onshow = function() {
-	   	updateDisplay();
-        if (cycleHandle == null) {
-            cycleHandle = setInterval("updateDisplay_cycle();", cycleInterval);
-        }
-	};
-
-    loadPrefences();
-}
-
-/**
  * Boots the widget.
  * Called from body.onload
  */
 function setup()
 {
-	//TODO Get default values for DST and GMT offset from OS
+    //The following only works from within dashboard
+    if (window.widget) {
+    	widget.onshow = startCycle;
+    	widget.onhide = stopCycle;
+        loadPrefences();
+    }
+    
+    //Populate widget's back face
 	loadDSTSelector();
-	
-	//populate backside fields	
 	document.getElementById('nameField').value = prefs.cityName;
 	document.getElementById('offsetField').value = prefs.offsetFromGMT;
-	
-  	//.selectedIndex needs to be a number, not a string like dstRule is, so first we find it
-  	var selector = document.getElementById('dstSelect');
-  	var selectedIndex = -1;
-  	for (var i = 0; ((i < selector.options.length) && (selectedIndex == -1)); i++) {
-  		if (selector.options[i].value == prefs.dstRule) {
-  			selectedIndex = i;
-  		}
-  	}
-  	//Now that we found it, set it
-	selector.selectedIndex = selectedIndex;
-	
+	setSelectedValue(document.getElementById('dstSelect'), prefs.dstRule);
 	document.getElementById('tiny').checked = prefs.tiny;
 
-	updateDisplay();
-
+    //Start the clock
+	startCycle();
+	
+	//Tell Dashboard everything's cool
 	return 0;
 }
 
@@ -92,6 +66,40 @@ function loadDSTSelector() {
 }
 
 /**
+ * Sets the selectedIndex of the given selector to the item that matches the given value.
+ */
+function setSelectedValue(selector, value) {
+    var selector = document.getElementById('dstSelect');
+  	var selectedIndex = -1;
+  	for (var i = 0; ((i < selector.options.length) && (selectedIndex == -1)); i++) {
+  		if (selector.options[i].value == value) {
+  			selectedIndex = i;
+  		}
+  	}
+	selector.selectedIndex = selectedIndex;
+}
+
+/**
+ * Turns on the update cycle.
+ */ 
+function startCycle() {
+   	updateDisplay();
+    if (cycleHandle == null) {
+        cycleHandle = setInterval("updateDisplay_cycle();", cycleInterval);
+    }
+}
+
+/**
+ * Turns off the update cycle.
+ */
+function stopCycle() {
+    if (cycleHandle != null) {
+        clearInterval(cycleHandle);
+        cycleHandle = null;
+    }
+}
+
+/**
  * Wraps updateDisplay so we don't do it unless the time has changed.
  * This makes the refresh cycles lighter if they're called too often.
  */
@@ -104,27 +112,10 @@ function updateDisplay_cycle() {
 /**
  * Checks if the displayed time has changed.  
  */
-function timeChanged(countSeconds) {
-	var same = false;
-	var cur = new Date();
-
-	if (referenceTime != undefined) {
-		same = (
-			referenceTime.getMinutes() == cur.getMinutes() &&
-			referenceTime.getHours() == cur.getHours() &&
-			referenceTime.getDay() == cur.getDay() &&
-			referenceTime.getMonth() == cur.getMonth() &&
-			referenceTime.getFullYear() == cur.getFullYear()
-		);
-		
-		if(prefs.showSeconds) {
-		  same = same && (referenceTime.getSeconds() == cur.getSeconds());
-		}
-	} else {
-	   referenceTime = cur;
-	}
-
-	return !same;
+function timeChanged() {
+    now = new Date();
+    return (prefs.showSeconds && (lastUpdate.getSeconds() != now.getSeconds())) ||
+           (lastUpdate.getMinutes() != now.getMinutes());
 }
 
 /**
@@ -137,8 +128,18 @@ function updateDisplay() {
         front.className = "big";
     }
     
-	time = getOffsetTime();
+	document.getElementById('time').firstChild.data=formatTime(getOffsetTime());
+	document.getElementById('location').firstChild.data=prefs.cityName;
+	
+	lastUpdate = new Date();
+}
 
+/**
+ * Formats the time as a string according to this program's display parameters.
+ */
+function formatTime(time) {
+    var stringTime;
+    
     secondSymbol = (prefs.showSeconds)?":%S":"";
     if (prefs.use24HR) {
         stringTime = time.strftime("%a %H:%M"+secondSymbol);
@@ -151,10 +152,7 @@ function updateDisplay() {
         }
     }
     
-	document.getElementById('time').firstChild.data=stringTime;
-	document.getElementById('location').firstChild.data=prefs.cityName;
-	
-	referenceTime = time;
+    return stringTime;
 }
 
 /**
