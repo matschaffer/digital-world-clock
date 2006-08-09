@@ -48,9 +48,8 @@ body {
 }
 
 .small #location {
-  color: #888;
   font: 9px/9px Geneva;
-  letter-spacing: -1px;
+  font-weight: bold;
 }
 
 .flip {
