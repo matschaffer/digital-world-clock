@@ -144,16 +144,14 @@ function formatTime(time) {
     if (prefs.use24HR) {
         stringTime = time.strftime("%a %H:%M"+secondSymbol);
     } else {
-        stringTime = time.strftime("%a %l:%M"+secondSymbol);
-        if(time.getHours() < 12) {
-           stringTime += "a";
-        } else {
-           stringTime += "p";
-        }
+        stringTime = time.strftime("%a %l:%M"+secondSymbol+"%p");
     }
     
     return stringTime;
 }
+
+// Customize AM/PM display.
+Date.meridian = { 'AM': 'a', 'PM': 'p' }
 
 /**
  * Get the time offset by GMT and DST preferences.
