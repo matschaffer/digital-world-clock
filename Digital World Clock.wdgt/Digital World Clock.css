@@ -24,9 +24,11 @@ body {
     margin: auto 0;
 	text-align: center;
 }
-
 #time {
 	color: #000000;
+}
+#time:hover {
+	color: #666;
 }
 
 .big #time {
