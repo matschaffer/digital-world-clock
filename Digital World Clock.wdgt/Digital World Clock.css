@@ -1,8 +1,8 @@
-body {
+body, div {
 	margin: 0;
 	font-family: "Futura" sans;
+	cursor: default;
 }
-
 #front {
     display: table-cell;
     vertical-align: middle;
@@ -29,6 +29,7 @@ body {
 }
 #time:hover {
 	color: #666;
+	cursor: hand;
 }
 
 .big #time {
@@ -36,7 +37,8 @@ body {
 }
 
 .small #time {
-    font: 11px/11px "Lucida Grande";
+    font-size: 11px;
+    line-height: 11px;
 }
 
 #location {
@@ -49,7 +51,6 @@ body {
 
 .small #location {
   font: 9px/9px Geneva;
-  font-weight: bold;
 }
 
 .flip {
