@@ -39,12 +39,12 @@ function hidePreferences()
 	   back.style.display="none";			// hide the back
 	   front.style.display=frontDisplay;	// show the front
     });	
-    exitflip();
+    exitflip();     //Hide the "i" incase the mouse moved during animation
     mouseexit();
 }
 
-// Code below taken from Apple's developer guides verbatum
-var flipShown = false;
+// Code below adapted from Apple's developer guides
+var flipShown = new Object;
 var animation = {duration:0, starttime:0, to:1.0, now:0.0, from:0.0, firstElement:null, timer:null};
 
 // mousemove() is the event handle assigned to the onmousemove property on the front div of the widget. 
@@ -53,8 +53,23 @@ var animation = {duration:0, starttime:0, to:1.0, now:0.0, from:0.0, firstElemen
 
 function mousemove (event)
 {
-	if (!flipShown)			// if the preferences flipper is not already showing...
+    fadeIn(document.getElementById ('flip'));
+    fadeIn(document.getElementById ('resize'));
+}
+
+// mouseexit() is the opposite of mousemove() in that it preps the preferences flipper
+// to disappear.  It adds the appropriate values to the animation data structure and sets the animation in motion.
+
+function mouseexit (event)
+{
+    fadeOut(document.getElementById ('flip'));
+    fadeOut(document.getElementById ('resize'));
+}
+
+function fadeIn(item) {
+	if (!flipShown[item.id])			// if the preferences flipper is not already showing...
 	{
+	    
 		if (animation.timer != null)			// reset the animation timer value, in case a value was left behind
 		{
 			clearInterval (animation.timer);
@@ -65,21 +80,17 @@ function mousemove (event)
 		
 		animation.duration = 500;												// animation time, in ms
 		animation.starttime = starttime;										// specify the start time
-		animation.firstElement = document.getElementById ('flip');		// specify the element to fade
+		animation.firstElement = item;		// specify the element to fade
 		animation.timer = setInterval ("animate();", 13);						// set the animation function
 		animation.from = animation.now;											// beginning opacity (not ness. 0)
 		animation.to = 1.0;														// final opacity
 		animate();																// begin animation
-		flipShown = true;														// mark the flipper as animated
+		flipShown[item.id] = true;														// mark the flipper as animated
 	}
 }
 
-// mouseexit() is the opposite of mousemove() in that it preps the preferences flipper
-// to disappear.  It adds the appropriate values to the animation data structure and sets the animation in motion.
-
-function mouseexit (event)
-{
-	if (flipShown)
+function fadeOut(item) {
+	if (flipShown[item.id])
 	{
 		// fade in the flip widget
 		if (animation.timer != null)
@@ -92,12 +103,12 @@ function mouseexit (event)
 		
 		animation.duration = 500;
 		animation.starttime = starttime;
-		animation.firstElement = document.getElementById ('flip');
+		animation.firstElement = item;
 		animation.timer = setInterval ("animate();", 13);
 		animation.from = animation.now;
 		animation.to = 0.0;
 		animate();
-		flipShown = false;
+		flipShown[item.id] = false;
 	}
 }
 
@@ -141,6 +152,8 @@ function computeNextFloat (from, to, ease)
     return from + (to - from) * ease;
 }
 
+// Provides hover function
+
 function enterflip()
 {
 	document.getElementById('fliprollie').style.display = 'block';
@@ -149,4 +162,4 @@ function enterflip()
 function exitflip()
 {
 	document.getElementById('fliprollie').style.display = 'none';
-}
+} 

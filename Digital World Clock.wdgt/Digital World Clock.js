@@ -225,3 +225,14 @@ function switchFormat() {
     savePreferences();
     updateDisplay();
 } 
+
+/**
+ * Switches the size between big and small
+ */
+function resize() {
+    prefs.tiny = !prefs.tiny;
+    document.getElementById('front').style.display = 'none'
+    savePreferences();
+    updateDisplay();
+    document.getElementById('front').style.display = frontDisplay;
+}

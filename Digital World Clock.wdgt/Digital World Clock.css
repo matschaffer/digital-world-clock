@@ -76,10 +76,36 @@ body, div {
 }
 
 #fliprollie {
-	display:none;
+    display:none;
 	opacity:0.25;
 	background: url(file:///System/Library/WidgetResources/ibutton/black_rollie.png) no-repeat top left;
 	z-index:7999;
+}
+
+.resize {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+}
+
+.big .resize {
+    top: 65px;
+    left: 10px;
+}
+
+.small .resize {
+    top: 23px;
+    left: 10px;
+}
+
+#resize {
+	opacity:0;
+	background: url(Images/Resize.png) no-repeat top left;
+	z-index:8000;
+}
+
+#resize:hover {
+    background: url(Images/Resize-hover.png) no-repeat top left;
 }
 
 #back {
