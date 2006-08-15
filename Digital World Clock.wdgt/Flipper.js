@@ -1,5 +1,5 @@
 var frontDisplay = "table-cell";
-var backDisplay = "block";
+var backDisplay = "table-cell";
 
 /**
  * Abstracts flipping logic.
@@ -7,9 +7,6 @@ var backDisplay = "block";
  * @param function cleanup A function to be called during the transition.  This should change div display styles.
  */
 function flipWidget(transition, cleanup) {
-    var front = document.getElementById("front");
-	var back = document.getElementById("back");
-
     if (window.widget)
 		widget.prepareForTransition(transition);
 
@@ -62,8 +59,16 @@ function mouseexit (event)
     }
 }
 
+/**
+ * Holds which items are shown for rollover animations.
+ */
 var itemsShown = new Object;
 
+/**
+ * Fades an item's opacity.
+ * @param element item The item (usually div) to fade.
+ * @param string direction Either "in" or "out" indicating the fade direction.
+ */
 function fade(item, direction) {
     itemsShown[item.id] = !itemsShown[item.id]; 
     animator = new AppleAnimator(500, 13);
@@ -80,18 +85,27 @@ function fade(item, direction) {
     animator.start();
 }
 
+/**
+ * Fades the given item in.
+ */
 function fadeIn(item) {
     if (!itemsShown[item.id]) {
         fade(item, "in");
     }
 }
 
+/**
+ * Fades the given item out.
+ */
 function fadeOut(item) {
     if (itemsShown[item.id]) {
         fade(item, "out");
     }
 }
 
+/**
+ * Generates an opacity animation handler for the given item.
+ */
 function animationHandler(item)
 {
     return function(animation, current, start, finish) {
@@ -99,12 +113,17 @@ function animationHandler(item)
     }
 }
 
-// Provides hover functionality on the "i" circular border
+/**
+ * Provides onmouseover hover functionality for the front-side "i" since :hover doesn't want to work.
+ */
 function enterflip()
 {
 	document.getElementById('fliprollie').style.display = 'block';
 }
 
+/**
+ * Provides onmouseout hover functionality for the front-side "i" since :hover doesn't want to work.
+ */
 function exitflip()
 {
 	document.getElementById('fliprollie').style.display = 'none';

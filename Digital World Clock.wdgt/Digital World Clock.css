@@ -24,12 +24,28 @@ body, div {
     margin: auto 0;
 	text-align: center;
 }
+
+/*
+This is a hack until someone can figure out why the small size doesn't work after going to the back panel.
+    Steps to reproduce:
+        - take this rule out
+        - load widget
+        - flip to back side, flip to front side
+        - hit resize button
+*/
+.small .clock {
+    position: absolute;
+    top: 14px;
+    left: 12px;
+}
+
 #time {
 	color: #000000;
 }
+
 #time:hover {
 	color: #666;
-	cursor: hand;
+	cursor: pointer;
 }
 
 .big #time {

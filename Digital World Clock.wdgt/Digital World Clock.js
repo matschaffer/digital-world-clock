@@ -1,4 +1,10 @@
 /**
+ * We reference front and back a lot, so here are some shortcuts. Assigned in setup().
+ */
+var front;
+var back;
+
+/**
  * In-memory storage for preferences.  Starts with default options.
  */
 var prefs = new Object;
@@ -30,6 +36,9 @@ var cycleHandle = null;
  */
 function setup()
 {
+    front = document.getElementById("front");
+    back = document.getElementById("back");
+    
     //The following only works from within dashboard
     if (window.widget) {
     	widget.onshow = startCycle;
@@ -121,9 +130,9 @@ function timeChanged() {
  */
 function updateDisplay() {
     if (prefs.tiny) {
-        front.className = "small";
+        document.getElementById('front').className = "small";
     } else {
-        front.className = "big";
+        document.getElementById('front').className = "big";
     }
     
 	document.getElementById('time').firstChild.data=formatTime(getOffsetTime());
@@ -231,8 +240,6 @@ function switchFormat() {
  */
 function resize() {
     prefs.tiny = !prefs.tiny;
-    document.getElementById('front').style.display = 'none'
     savePreferences();
     updateDisplay();
-    document.getElementById('front').style.display = frontDisplay;
 }
