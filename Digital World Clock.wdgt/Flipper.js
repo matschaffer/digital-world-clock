@@ -1,6 +1,3 @@
-var frontDisplay = "table-cell";
-var backDisplay = "table-cell";
-
 /**
  * Abstracts flipping logic.
  * @param String transition A transition name
@@ -23,7 +20,7 @@ function showPreferences()
 {	
     flipWidget("ToBack", function() {
         front.style.display = "none";       //hide the front
-        back.style.display = backDisplay;   //show the back
+        back.style.display = "block";   //show the back
     });	
 }
 
@@ -33,8 +30,8 @@ function showPreferences()
 function hidePreferences()
 {	
     flipWidget("ToFront", function() {
-	   back.style.display="none";			// hide the back
-	   front.style.display=frontDisplay;	// show the front
+	   back.style.display = "none";			// hide the back
+	   front.style.display = "block";	// show the front
     });	
     exitflip();     //Hide the "i" incase the mouse moved during animation
 }
