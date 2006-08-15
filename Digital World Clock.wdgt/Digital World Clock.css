@@ -93,8 +93,7 @@ body, div {
 
 #back label {
   position: absolute;
-  font: 10px "Helvetica Neue";
-  font-weight: bold;
+  font: 10px "Lucida Grande";
   color:white;
 }
 
@@ -109,14 +108,9 @@ body, div {
   left: 94px;
 }
 
-#dstLabel {
-  top:42px;
-  left: 9px;
-}
-
 #back input, #back select {
   position: absolute;
-  font: 12px "LucidaGrande";
+  font: 11px "LucidaGrande";
 }
 
 #nameField {
@@ -125,9 +119,13 @@ body, div {
   width: 84px;
 }
 
+#dstLabel {
+  top:44px;
+  left: 9px;
+}
 #dstSelect {
   left: 9px;
-  top: 53px;
+  top: 55px;
   width: 73px;
 } 
 
@@ -140,7 +138,7 @@ body, div {
 .doneButton {
   background: url('Images/done.png') center center no-repeat;
   position: absolute;
-  top: 53px;
+  top: 56px;
   left: 85px;
   height: 23px;
   width: 38px;
