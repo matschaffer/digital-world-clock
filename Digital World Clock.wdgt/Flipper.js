@@ -33,26 +33,41 @@ function hidePreferences()
 	   back.style.display = "none";			// hide the back
 	   front.style.display = "block";	// show the front
     });	
-    exitflip();     //Hide the "i" incase the mouse moved during animation
+    hideIcons();
 }
 
 /**
- * Handles display actions when mouse is over the widget.  Namely, displaying the front-side controls.
+ * Shows the front-side icons.
  */
-function mousemove (event)
-{
+function showIcons() {
     fadeIn(document.getElementById ('flip'));
     fadeIn(document.getElementById ('resize'));
 }
 
 /**
- * Handles display actions when mouse leaves the widget.  Namely, hiding the front-side controls.
+ * Hides the front-side icons.
+ */
+function hideIcons() {
+    exitflip();
+    fadeOut(document.getElementById ('flip'));
+    fadeOut(document.getElementById ('resize'));
+}
+
+/**
+ * Handles display actions when mouse is over the widget. 
+ */
+function mousemove (event)
+{
+    showIcons();
+}
+
+/**
+ * Handles display actions when mouse leaves the widget. 
  */
 function mouseexit (event)
 {
-    if (event.toElement && (event.toElement.nodeName == 'BODY')) {
-        fadeOut(document.getElementById ('flip'));
-        fadeOut(document.getElementById ('resize'));
+    if (event.toElement && ((event.toElement.nodeName == 'BODY') || (event.toElement.nodeName == 'HTML'))) {
+        hideIcons();
     }
 }
 

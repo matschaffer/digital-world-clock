@@ -242,4 +242,5 @@ function resize() {
     prefs.tiny = !prefs.tiny;
     savePreferences();
     updateDisplay();
+    hideIcons();
 }
