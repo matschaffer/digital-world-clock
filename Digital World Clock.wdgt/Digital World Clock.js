@@ -42,7 +42,6 @@ function setup()
 	document.getElementById('nameField').value = prefs.cityName;
 	document.getElementById('offsetField').value = prefs.offsetFromGMT;
 	setSelectedValue(document.getElementById('dstSelect'), prefs.dstRule);
-	document.getElementById('tiny').checked = prefs.tiny;
 
     //Start the clock
 	startCycle();
@@ -56,11 +55,10 @@ function setup()
  */
 function loadDSTSelector() {
 	var selector = document.getElementById('dstSelect');
-	var j = 0;
 	for (var i in DSTCalculator) {
 	    option = document.createElement('option');
 	    option.value = i;
-	    option.innerHTML = j++ + ": " + i;
+	    option.innerHTML = i;
 	    selector.appendChild(option);
 	}
 }
@@ -173,7 +171,6 @@ function getOffsetTime() {
 function updatePreferences() {
 	prefs.cityName = document.getElementById('nameField').value;
 	prefs.offsetFromGMT = parseFloat(document.getElementById('offsetField').value);
-	prefs.tiny = document.getElementById('tiny').checked;
 	var dstBox = document.getElementById('dstSelect');
 	prefs.dstRule = dstBox.options[dstBox.selectedIndex].value;
 }

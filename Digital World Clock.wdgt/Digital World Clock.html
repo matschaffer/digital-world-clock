@@ -24,16 +24,18 @@
 	</div>
 
 	<div id="back">
-		<div id='name-label' class='label'>Location Name/DST</div>
-        <div id='offset-label' class='label'>Offset from GMT / Tiny</div>
-		<input id='nameField' class='field'/>
-		<select id='dstSelect'>
-			<!--  This is populated by setup() -->
-		</select>
-		<input id='offsetField' class='field' size='3' />
-		<input type='checkbox' id='tiny' />
-       
-		<img class="doneButton" src="Images/done.png" onclick='doneClicked()' />
+	   <label for="nameField" id="nameLabel">Location Name</label>
+	   <input id='nameField'/>
+	   
+	   <label for="offsetField" id="offsetLabel">Offset</label> 
+       <input id='offsetField'/>
+		
+	   <label for="dstSelect" id="dstLabel">DST Rule</label>
+	   <select id='dstSelect'>
+	       <!--  This is populated by setup() -->
+	   </select>
+	  
+	   <div class="doneButton" onclick='doneClicked();' />
 	</div>
 		
 </body>

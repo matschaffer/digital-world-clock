@@ -80,14 +80,7 @@ body, div {
 	opacity:0.25;
 	background: url(file:///System/Library/WidgetResources/ibutton/black_rollie.png) no-repeat top left;
 	z-index:7999;
-
 }
-
-.doneButton {
-  position: absolute;
-  top: 55px;
-  left: 65px;
-} 
 
 #back {
 	width: 132px;
@@ -98,46 +91,57 @@ body, div {
 	display: none;
 }
 
-.label {
+#back label {
   position: absolute;
   font: 10px "Helvetica Neue";
   font-weight: bold;
   color:white;
+}
+
+#nameLabel {
+  top:6px;
   left: 9px;
 }
 
-#name-label {
-  top:6px;
+#offsetLabel {
+  position: absolute;
+  top: 6px;
+  left: 94px;
 }
 
-#offset-label {
-  top:41px;
+#dstLabel {
+  top:42px;
+  left: 9px;
 }
 
-.field {
+#back input, #back select {
   position: absolute;
   font: 12px "LucidaGrande";
-  left: 9px;
 }
 
 #nameField {
+  left: 9px;
   top: 18px;
-  width: 70px;
+  width: 84px;
 }
 
-#offsetField {
-	top: 53px;
+#dstSelect {
+  left: 9px;
+  top: 53px;
+  width: 73px;
 } 
 
-#tiny {
-	position: absolute;
-	top: 57px;
-	left: 46px;
-}	
+#offsetField {
+  top: 18px;
+  left: 97px;
+  width: 25px;
+}
 
-#dstSelect {
-	position: absolute;
-	top: 20px;
-	left: 83px;
-	width: 40px;
+.doneButton {
+  background: url('Images/done.png') center center no-repeat;
+  position: absolute;
+  top: 53px;
+  left: 85px;
+  height: 23px;
+  width: 38px;
 }
