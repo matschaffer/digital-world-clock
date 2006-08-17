@@ -1,5 +1,3 @@
-var icons = [document.getElementById('flip'), document.getElementById('resize')]
-
 /**
  * Abstracts flipping logic.
  * @param String transition A transition name
@@ -35,7 +33,7 @@ function hidePreferences()
 	   back.style.display = "none";			// hide the back
 	   front.style.display = "block";	// show the front
     });	
-    hideIcons(true);
+    hideIcons();
 }
 
 /**
@@ -50,10 +48,10 @@ function showIcons() {
 /**
  * Hides the front-side icons.
  */
-function hideIcons(instant) {
+function hideIcons() {
     exitflip();
     for(i in icons) {
-        fadeOut(icons[i], instant);
+        fadeOut(icons[i]);
     }
 }
 
@@ -78,16 +76,23 @@ function mouseexit (event)
 /**
  * Holds which items are shown for rollover animations.
  */
-var itemsShown = new Object;
+var itemsShown = {};
+
+/**
+ * Holds animators for items that have been previous faded
+ */
+var fadeAnimators = {};
 
 /**
  * Fades an item's opacity.
  * @param element item The item (usually div) to fade.
  * @param string direction Either "in" or "out" indicating the fade direction.
  */
-function fade(item, direction, instant) {    
-    animator = new AppleAnimator(500, 13);
-  
+function fade(item, direction) {    
+    if (fadeAnimators[item.id]) {
+        fadeAnimators[item.id].stop();
+    }
+    
     if (direction == "in") {
       itemsShown[item.id] = true;
       startOpacity = 0.0;
@@ -98,37 +103,35 @@ function fade(item, direction, instant) {
       endOpacity = 0.0;
     }
     
-    if (instant) {
-        item.style.opacity = endOpacity;
-    } else {
-        animation = new AppleAnimation(startOpacity, endOpacity, animationHandler(item));
-        animator.addAnimation(animation);
-        animator.start();
-    }
+    animator = new AppleAnimator(500, 13);
+    animation = new AppleAnimation(startOpacity, endOpacity, opacityHandler(item));
+    animator.addAnimation(animation);
+    animator.start();
+    fadeAnimators[item.id] = animator;
 }
 
 /**
  * Fades the given item in.
  */
-function fadeIn(item, instant) {
+function fadeIn(item) {
     if (!itemsShown[item.id]) {
-        fade(item, "in", instant);
+        fade(item, "in");
     }
 }
 
 /**
  * Fades the given item out.
  */
-function fadeOut(item, instant) {
+function fadeOut(item) {
     if (itemsShown[item.id]) {
-        fade(item, "out", instant);
+        fade(item, "out");
     }
 }
 
 /**
  * Generates an opacity animation handler for the given item.
  */
-function animationHandler(item)
+function opacityHandler(item)
 {
     return function(animation, current, start, finish) {
         item.style.opacity = current;
