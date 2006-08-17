@@ -1,8 +1,9 @@
 /**
- * We reference front and back a lot, so here are some shortcuts. Assigned in setup().
+ * We reference front and back and icons a lot, so here are some shortcuts. Assigned in setup().
  */
 var front;
 var back;
+var icons;
 
 /**
  * In-memory storage for preferences.  Starts with default options.
@@ -38,6 +39,7 @@ function setup()
 {
     front = document.getElementById("front");
     back = document.getElementById("back");
+    icons = [document.getElementById('flip'), document.getElementById('resize')]
     
     //The following only works from within dashboard
     if (window.widget) {
@@ -242,5 +244,5 @@ function resize() {
     prefs.tiny = !prefs.tiny;
     savePreferences();
     updateDisplay();
-    hideIcons();
+    hideIcons(true);
 }

@@ -1,3 +1,5 @@
+var icons = [document.getElementById('flip'), document.getElementById('resize')]
+
 /**
  * Abstracts flipping logic.
  * @param String transition A transition name
@@ -33,24 +35,26 @@ function hidePreferences()
 	   back.style.display = "none";			// hide the back
 	   front.style.display = "block";	// show the front
     });	
-    hideIcons();
+    hideIcons(true);
 }
 
 /**
  * Shows the front-side icons.
  */
 function showIcons() {
-    fadeIn(document.getElementById ('flip'));
-    fadeIn(document.getElementById ('resize'));
+    for(i in icons) {
+        fadeIn(icons[i]);
+    }
 }
 
 /**
  * Hides the front-side icons.
  */
-function hideIcons() {
+function hideIcons(instant) {
     exitflip();
-    fadeOut(document.getElementById ('flip'));
-    fadeOut(document.getElementById ('resize'));
+    for(i in icons) {
+        fadeOut(icons[i], instant);
+    }
 }
 
 /**
@@ -81,37 +85,43 @@ var itemsShown = new Object;
  * @param element item The item (usually div) to fade.
  * @param string direction Either "in" or "out" indicating the fade direction.
  */
-function fade(item, direction) {
-    itemsShown[item.id] = !itemsShown[item.id]; 
+function fade(item, direction, instant) {    
     animator = new AppleAnimator(500, 13);
   
     if (direction == "in") {
-      animation = new AppleAnimation(0.0, 1.0, animationHandler(item));
+      itemsShown[item.id] = true;
+      startOpacity = 0.0;
+      endOpacity = 1.0;
     } else {
-      animation = new AppleAnimation(1.0, 0.0, animationHandler(item));
+      itemsShown[item.id] = false;
+      startOpacity = 1.0;
+      endOpacity = 0.0;
     }
-    animation.item = item;
     
-    animator.addAnimation(animation);
-    
-    animator.start();
+    if (instant) {
+        item.style.opacity = endOpacity;
+    } else {
+        animation = new AppleAnimation(startOpacity, endOpacity, animationHandler(item));
+        animator.addAnimation(animation);
+        animator.start();
+    }
 }
 
 /**
  * Fades the given item in.
  */
-function fadeIn(item) {
+function fadeIn(item, instant) {
     if (!itemsShown[item.id]) {
-        fade(item, "in");
+        fade(item, "in", instant);
     }
 }
 
 /**
  * Fades the given item out.
  */
-function fadeOut(item) {
+function fadeOut(item, instant) {
     if (itemsShown[item.id]) {
-        fade(item, "out");
+        fade(item, "out", instant);
     }
 }
 
