@@ -4,12 +4,13 @@
 		@import "Digital World Clock.css";
 	</style>
 
-    <script type='text/javascript' src='date.js' charset='utf-8'></script> 	
+    <script type='text/javascript' src='lib/date.js' charset='utf-8'></script> 	
+    <script type='text/javascript' src='lib/json.js' charset='utf-8'></script> 	
+	<script type='text/javascript' src='/System/Library/WidgetResources/AppleClasses/AppleAnimator.js' charset='utf-8'/>
 	<script type='text/javascript' src='Flipper.js' charset='utf-8'></script>
 	<script type='text/javascript' src='DSTCalculatorInit.js' charset='utf-8'></script>
 	<script type='text/javascript' src='DSTCalculator.js' charset='utf-8'></script>
 	<script type='text/javascript' src='Digital World Clock.js' charset='utf-8'></script>
-	<script type='text/javascript' src='/System/Library/WidgetResources/AppleClasses/AppleAnimator.js' charset='utf-8'/>
 </head>
 
 <body onload='setup();'>
@@ -28,7 +29,7 @@
 
 	<div id="back">
 	   <label for="nameField" id="nameLabel">Location Name</label>
-	   <input id='nameField'/>
+	   <input id='nameField' onkeyup='loadLocation(this);' />
 	   
 	   <label for="offsetField" id="offsetLabel">Offset</label> 
        <input id='offsetField'/>

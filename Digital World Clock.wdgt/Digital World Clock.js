@@ -17,6 +17,12 @@ prefs.offsetFromGMT = 9;
 prefs.showSeconds = false;
 
 /**
+ * Location database, for storing info about different location preferences and doing auto-complete for previously
+ * defined locations.
+ */
+var locationDatabase = {};
+
+/**
  * Storage for the last displayed time.
  */
 var lastUpdate = undefined;
@@ -46,13 +52,12 @@ function setup()
     	widget.onshow = startCycle;
     	widget.onhide = stopCycle;
         loadPrefences();
+        loadLocationDatabase();
     }
     
     //Populate widget's back face
 	loadDSTSelector();
-	document.getElementById('nameField').value = prefs.cityName;
-	document.getElementById('offsetField').value = prefs.offsetFromGMT;
-	setSelectedValue(document.getElementById('dstSelect'), prefs.dstRule);
+	loadBackFields();
 
     //Start the clock
 	startCycle();
@@ -72,6 +77,15 @@ function loadDSTSelector() {
 	    option.innerHTML = i;
 	    selector.appendChild(option);
 	}
+}
+
+/**
+ * Loads backface form fields.
+ */
+function loadBackFields() {
+	document.getElementById('nameField').value = prefs.cityName;
+	document.getElementById('offsetField').value = prefs.offsetFromGMT;
+	setSelectedValue(document.getElementById('dstSelect'), prefs.dstRule);
 }
 
 /**
@@ -192,6 +206,7 @@ function updatePreferences() {
 function doneClicked() {
 	updatePreferences();
 	savePreferences();
+	saveLocationDatabase();
 	hidePreferences();
 	updateDisplay();
 }
@@ -205,15 +220,24 @@ function createkey(key)
 }
 
 /**
+ * A helper to access preferences but return an original value if there is no preference available.
+ */
+function getPreference(name, original) {
+    preference = widget.preferenceForKey(name);
+    if (preference != undefined) {
+        return preference;
+    } else {
+        return original;
+    }
+}
+
+/**
  * Loads preferences from Dashboard's preference engine.
  */
 function loadPrefences() {
     var preference;
 	for(i in prefs) {
-	   preference = widget.preferenceForKey(createkey(i));
-	   if (preference != undefined) {
-	       prefs[i] = preference;
-	   }
+	   prefs[i] = getPreference(createkey(i), prefs[i]);
 	}
 }
 
@@ -225,6 +249,36 @@ function savePreferences() {
         for(i in prefs) {
             widget.setPreferenceForKey(prefs[i], createkey(i));
         }
+    }
+}
+
+/**
+ * Saves the location database to widget preferences.
+ */
+function saveLocationDatabase() {
+    locationDatabase[prefs.cityName] = {'dstRule': prefs.dstRule, 'offsetFromGMT': prefs.offsetFromGMT};
+    json = toJSONString(locationDatabase);
+    if (window.widget) {
+        widget.setPreferenceForKey(json, "locationDatabase");
+    }
+}
+
+/**
+ * Loads the location database from widget preferences.
+ */
+function loadLocationDatabase() {
+    locationDatabase = getPreference("locationDatabase", locationDatabase);
+}
+
+/**
+ * Tries to load stats for the given location from the location database.
+ */
+function loadLocation(locationField) {
+    if (locationPrefs = locationDatabase[locationField.value]) {
+        prefs.cityName = locationField.value;
+        prefs.offsetFromGMT = locationPrefs['offsetFromGMT'];
+        prefs.dstRule = locationPrefs['dstRule'];
+        loadBackFields();
     }
 }
 
