@@ -8,11 +8,11 @@
 /**
  * Parses a JSON string and returns the corresponding object.
  */
-String.prototype.parseJSON = function () {
+parseJSON = function parseJSON(x) {
     try {
         return !(/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/.test(
-                this.replace(/"(\\.|[^"\\])*"/g, ''))) &&
-            eval('(' + this + ')');
+                x.replace(/"(\\.|[^"\\])*"/g, ''))) &&
+            eval('(' + x + ')');
     } catch (e) {
         return false;
     }
@@ -108,6 +108,6 @@ var jsonFunctions = {
 /**
  * Converts an object to a string containing JSON.
  */
-function toJSONString(thing) {
+function toJSON(thing) {
     return jsonFunctions[typeof thing](thing);
 }
