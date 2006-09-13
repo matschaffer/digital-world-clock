@@ -256,10 +256,9 @@ function savePreferences() {
  * Saves the location database to widget preferences.
  */
 function saveLocationDatabase() {
-    locationDatabase[prefs.cityName] = {'dstRule': prefs.dstRule, 'offsetFromGMT': prefs.offsetFromGMT};
-    json = toJSONString(locationDatabase);
     if (window.widget) {
-        widget.setPreferenceForKey(json, "locationDatabase");
+        locationDatabase[prefs.cityName] = {offsetFromGMT: prefs.offsetFromGMT, dstRule: prefs.dstRule};
+        widget.setPreferenceForKey(toJSON(locationDatabase), "locationDatabase");
     }
 }
 
@@ -268,6 +267,9 @@ function saveLocationDatabase() {
  */
 function loadLocationDatabase() {
     locationDatabase = getPreference("locationDatabase", locationDatabase);
+    if (locationDatabase.constructor == String) {
+      locationDatabase = parseJSON(locationDatabase);
+    }
 }
 
 /**
