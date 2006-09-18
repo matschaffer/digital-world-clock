@@ -8,7 +8,7 @@
 /**
  * Parses a JSON string and returns the corresponding object.
  */
-parseJSON = function parseJSON(x) {
+function parseJSON(x) {
     try {
         return !(/[^,:{}\[\]0-9.\-+Eaeflnr-u \n\r\t]/.test(
                 x.replace(/"(\\.|[^"\\])*"/g, ''))) &&
