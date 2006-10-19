@@ -273,14 +273,25 @@ function loadLocationDatabase() {
 }
 
 /**
- * Tries to load stats for the given location from the location database.
+ * A keypress listener on the location field.   Tries to autocomplete the location name
+ * and load GMT offset and daylight savings rules from the location database.
  */
 function loadLocation(locationField) {
-    if (locationPrefs = locationDatabase[locationField.value]) {
-        prefs.cityName = locationField.value;
-        prefs.offsetFromGMT = locationPrefs['offsetFromGMT'];
-        prefs.dstRule = locationPrefs['dstRule'];
-        loadBackFields();
+    if (event.keyCode >= 33 && event.keyCode <= 126) {
+        lowerValue = locationField.value.toLowerCase();
+        
+        for (i in locationDatabase) {
+            if (lowerValue == i.toLowerCase().slice(0, lowerValue.length)) {
+              locationField.value = locationField.value + i.slice(lowerValue.length);
+              locationField.setSelectionRange(lowerValue.length, i.length);
+              
+              prefs.cityName = locationField.value
+              prefs.offsetFromGMT = locationDatabase[i]['offsetFromGMT'];
+              prefs.dstRule = locationDatabase[i]['dstRule'];
+              loadBackFields();
+              break;
+            }
+        }
     }
 }
 
