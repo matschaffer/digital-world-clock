@@ -92,7 +92,6 @@ function loadBackFields() {
  * Sets the selectedIndex of the given selector to the item that matches the given value.
  */
 function setSelectedValue(selector, value) {
-    var selector = document.getElementById('dstSelect');
   	var selectedIndex = -1;
   	for (var i = 0; ((i < selector.options.length) && (selectedIndex == -1)); i++) {
   		if (selector.options[i].value == value) {
