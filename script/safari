@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd `dirname ${0}`
+open -a /Applications/Safari.app "../Digital World Clock.wdgt/Digital World Clock.html"

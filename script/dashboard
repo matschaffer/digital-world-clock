@@ -1,0 +1,5 @@
+#!/bin/sh
+
+cd `dirname ${0}`
+sh to_desktop
+open "${HOME}/Desktop/Digital World Clock.wdgt"

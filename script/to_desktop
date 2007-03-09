@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd `dirname ${0}`
+cp -r ../Digital\ World\ Clock.wdgt "${HOME}/Desktop"
