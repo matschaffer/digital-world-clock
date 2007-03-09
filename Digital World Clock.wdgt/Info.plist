@@ -9,9 +9,9 @@
 	<key>CFBundleName</key>
 	<string>Digital World Clock</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.5</string>
+	<string>1.5.1</string>
 	<key>CFBundleVersion</key>
-	<string>1.5</string>
+	<string>1.5.1</string>
 	<key>CloseBoxInsetX</key>
 	<integer>5</integer>
 	<key>CloseBoxInsetY</key>

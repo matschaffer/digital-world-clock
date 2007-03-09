@@ -6,7 +6,7 @@
 //  Use the following template to define new rules:
 //
 //  DSTCalculator['<place name>'] = function(offsetFromGMT) {
-//    if (givenAreaIsInOffset('<place name>', <start month>, <end month>, <start day offset>, <start day calibrate>, <start day offset>, <start day calibrate>, <hour to switch>, offsetFromGMT)) {
+//    if (givenAreaIsInOffset('<place name>', <start month>, <end month>, <start day offset>, <start day calibrate>, <end day offset>, <end day calibrate>, <hour to switch>, offsetFromGMT)) {
 //      return <number of hours for DST offset>;
 //    } else {
 //      return 0;
@@ -21,13 +21,23 @@ DSTCalculator['None'] = function(offsetFromGMT) {
 	return 0;
 };
 
-DSTCalculator['North America'] = function(offsetFromGMT) {
-	if (givenAreaIsInOffset('North America', 4, 10, 7, 4, 31, 1, 2, offsetFromGMT)) {
-	   return 1;
-	} else {
-	   return 0;
-	}
-};
+if (new Date().getUTCFullYear() >= 2007) {
+    DSTCalculator['North America'] = function(offsetFromGMT) {
+    	if (givenAreaIsInOffset('North America', 4, 10, 7, 4, 31, 1, 2, offsetFromGMT)) {
+    	   return 1;
+    	} else {
+    	   return 0;
+    	}
+    };
+} else {
+    DSTCalculator['North America'] = function(offsetFromGMT) {
+    	if (givenAreaIsInOffset('North America', 3, 11, 14, 1, 7, 6, 2, offsetFromGMT)) {
+    	   return 1;
+    	} else {
+    	   return 0;
+    	}
+    };
+}
 
 DSTCalculator['European'] = function(offsetFromGMT) {
 	if (givenAreaIsInOffset('European', 3, 10, 31, 4, 31, 1, 1, offsetFromGMT)) {
