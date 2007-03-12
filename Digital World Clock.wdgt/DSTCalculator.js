@@ -23,7 +23,7 @@ DSTCalculator['None'] = function(offsetFromGMT) {
 
 if (new Date().getUTCFullYear() >= 2007) {
     DSTCalculator['North America'] = function(offsetFromGMT) {
-    	if (givenAreaIsInOffset('North America', 4, 10, 7, 4, 31, 1, 2, offsetFromGMT)) {
+    	if (givenAreaIsInOffset('North America', 3, 11, 14, 1, 7, 6, 2, offsetFromGMT)) {
     	   return 1;
     	} else {
     	   return 0;
@@ -31,7 +31,7 @@ if (new Date().getUTCFullYear() >= 2007) {
     };
 } else {
     DSTCalculator['North America'] = function(offsetFromGMT) {
-    	if (givenAreaIsInOffset('North America', 3, 11, 14, 1, 7, 6, 2, offsetFromGMT)) {
+    	if (givenAreaIsInOffset('North America', 4, 10, 7, 4, 31, 1, 2, offsetFromGMT)) {
     	   return 1;
     	} else {
     	   return 0;
