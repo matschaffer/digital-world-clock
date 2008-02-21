@@ -70,3 +70,15 @@ DSTCalculator['Namibia'] = function(offsetFromGMT) {
 	   return 0;
 	}
 };
+
+//From http://www.timeanddate.com/worldclock/timezone.html?n=51
+DSTCalculator['Buenos Aires'] = function(offsetFromGMT) {
+	var now = new Date();
+	if ((now.getUTCFullYear() == 2008) && offsetTest(now, 1, 3, 1, 16, offsetFromGMT, 0)) {
+		return 1;
+	} else if ((now.getUTCFullYear() == 2009) && offsetTest(now, 10, 2, 5, 29, offsetFromGMT, 0)) {
+		return 1;
+	} else {
+		return 0;
+	}
+};
